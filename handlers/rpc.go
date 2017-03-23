@@ -6,7 +6,7 @@ import (
 	"log"
 	"strings"
 
-	"github.com/byuoitav/sony-control-microservice/helpers"
+	"github.com/byuoitav/pulse-eight-neo-microservice/helpers"
 	"github.com/labstack/echo"
 )
 
