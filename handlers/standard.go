@@ -8,11 +8,11 @@ import (
 )
 
 func PowerOn(context echo.Context) error {
-	return echo.JSON(http.StatusOK, nil)
+	return context.JSON(http.StatusOK, nil)
 }
 
 func Standby(context echo.Context) error {
-	return echo.JSON(http.StatusOK, nil)
+	return context.JSON(http.StatusOK, nil)
 }
 
 func SwitchInput(context echo.Context) error {
@@ -27,5 +27,5 @@ func SwitchInput(context echo.Context) error {
 		return context.JSON(http.StatusInternalServerError, err.Error())
 	}
 
-	return context > JSON(http.StatusOK, "Success")
+	return context.JSON(http.StatusOK, "Success")
 }
