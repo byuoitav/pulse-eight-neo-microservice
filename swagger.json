@@ -1,12 +1,12 @@
 {
 	"swagger": "2.0",
 	"info": {
-		"title": "Sony Control Microservice",
-		"description": "Interact with Sony display control protocols",
+		"title": "Pulse-Eight Neo Control Microservice",
+		"description": "Control Pulse-Eight HDMI matrices",
 		"version": "0.1"
 	},
 	"host": "api.byu.edu:443",
-	"basePath": "/byuoitav-sony-control-microservice/0.1",
+	"basePath": "/byuoitav-pulse-eight-neo-microservice/0.1",
 	"schemes": [
 		"https"
 	],

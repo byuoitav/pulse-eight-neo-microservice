@@ -5,10 +5,10 @@
         "Key": ".dockercfg"
     },
     "Image": {
-        "Name": "byuoitav/sony-control-microservice:<TAG>",
+        "Name": "byuoitav/pulse-eight-neo-microservice:<TAG>",
         "Update": "true"
     },
     "Ports": [{
-        "ContainerPort": "8007"
+        "ContainerPort": "8011"
     }]
 }

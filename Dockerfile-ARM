@@ -11,8 +11,8 @@ ADD . /go
 
 WORKDIR /go
 
-CMD ["/go/sony-control-microservice"]
+CMD ["/go/pulse-eight-neo-microservice"]
 
-EXPOSE 8007
+EXPOSE 8011
 
 RUN [ "cross-build-end" ]
