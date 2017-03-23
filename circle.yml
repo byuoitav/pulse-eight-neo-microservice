@@ -15,14 +15,14 @@ deployment:
         branch: master
         commands:
             - env GOOS=linux GOARCH=arm go build -v .
-            - docker build -f Dockerfile-ARM -t byuoitav/rpi-sony-control-microservice:$CIRCLE_SHA1 .
-            - docker build -f Dockerfile-ARM -t byuoitav/rpi-sony-control-microservice:latest .
-            - docker build -t byuoitav/sony-control-microservice:$CIRCLE_SHA1 .
-            - docker build -t byuoitav/sony-control-microservice:latest .
+            - docker build -f Dockerfile-ARM -t byuoitav/rpi-pulse-eight-neo-microservice:$CIRCLE_SHA1 .
+            - docker build -f Dockerfile-ARM -t byuoitav/rpi-pulse-eight-neo-microservice:latest .
+            - docker build -t byuoitav/pulse-eight-neo-microservice:$CIRCLE_SHA1 .
+            - docker build -t byuoitav/pulse-eight-neo-microservice:latest .
             - docker login -e $DOCKER_EMAIL -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-            - docker push byuoitav/sony-control-microservice:$CIRCLE_SHA1
-            - docker push byuoitav/sony-control-microservice:latest
-            - docker push byuoitav/rpi-sony-control-microservice:$CIRCLE_SHA1
-            - docker push byuoitav/rpi-sony-control-microservice:latest
+            - docker push byuoitav/pulse-eight-neo-microservice:$CIRCLE_SHA1
+            - docker push byuoitav/pulse-eight-neo-microservice:latest
+            - docker push byuoitav/rpi-pulse-eight-neo-microservice:$CIRCLE_SHA1
+            - docker push byuoitav/rpi-pulse-eight-neo-microservice:latest
             - ./deploy.sh $CIRCLE_PROJECT_REPONAME $CIRCLE_SHA1
             - ./deploy-pi.sh
