@@ -5,7 +5,7 @@
         "Key": ".dockercfg"
     },
     "Image": {
-        "Name": "byuoitav/pulse-eight-neo-microservice:<TAG>",
+        "Name": "byuoitav/pulse-eight-neo-microservice:latest",
         "Update": "true"
     },
     "Ports": [{
