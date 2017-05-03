@@ -9,6 +9,7 @@ import (
 
 func SwitchInput(address string, input string, output string) error {
 	resp, err := http.Get(fmt.Sprintf("http://%s/Port/Set/%s/%s", address, input, output))
+	defer resp.Body.Close()
 
 	if err != nil {
 		return err
@@ -23,3 +24,4 @@ func SwitchInput(address string, input string, output string) error {
 
 	return nil
 }
+

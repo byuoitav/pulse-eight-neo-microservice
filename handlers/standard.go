@@ -29,3 +29,18 @@ func SwitchInput(context echo.Context) error {
 
 	return context.JSON(http.StatusOK, "Success")
 }
+
+func GetPower(context echo.Context) error {
+	return context.JSON(http.StatusBadRequest, "Error")
+}
+
+func GetCurrentInput(context echo.Context) error {
+
+	address := context.Param("address")
+	inputs, err := helpers.GetCurrentInputs(address)
+	if err != nil {
+		return context.JSON(http.StatusInternalServerError, err.Error())
+	}
+
+	return context.JSON(http.StatusOK, inputs)
+}
