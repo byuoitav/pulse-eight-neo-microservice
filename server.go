@@ -36,7 +36,8 @@ func main() {
 
 	//Status endpoints
 	secure.GET("/:address/power/status", handlers.GetPower)
-	secure.GET("/:address/input/current", handlers.GetCurrentInput)
+	secure.GET("/:address/input/map", handlers.GetCurrentInput)
+	secure.GET("/:address/input/:port", handlers.GetInputByPort)
 
 	server := http.Server{
 		Addr:           port,

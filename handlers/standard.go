@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/byuoitav/pulse-eight-neo-microservice/helpers"
 	"github.com/labstack/echo"
@@ -43,4 +44,20 @@ func GetCurrentInput(context echo.Context) error {
 	}
 
 	return context.JSON(http.StatusOK, inputs)
+}
+
+func GetInputByPort(context echo.Context) error {
+
+	address := context.Param("address")
+	port, err := strconv.Atoi(context.Param("port"))
+	if err != nil {
+		return context.JSON(http.StatusBadRequest, err.Error())
+	}
+
+	input, err := helpers.GetInputByOutputPort(address, port)
+	if err != nil {
+		return context.JSON(http.StatusInternalServerError, err.Error())
+	}
+
+	return context.JSON(http.StatusOK, input)
 }
