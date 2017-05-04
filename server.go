@@ -29,9 +29,12 @@ func main() {
 	router.GET("/", echo.WrapHandler(http.HandlerFunc(hateoas.RootResponse)))
 	router.GET("/health", echo.WrapHandler(http.HandlerFunc(health.Check)))
 
-	secure.GET("/:address/power/on", handlers.PowerOn)
-	secure.GET("/:address/power/standby", handlers.Standby)
+	//Functionality endpoints
 	secure.GET("/:address/input/:input/:output", handlers.SwitchInput)
+
+	//Status endpoints
+	secure.GET("/:address/input/map", handlers.GetCurrentInput)
+	secure.GET("/:address/input/get/:port", handlers.GetInputByPort)
 
 	server := http.Server{
 		Addr:           port,
