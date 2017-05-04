@@ -30,12 +30,9 @@ func main() {
 	router.GET("/health", echo.WrapHandler(http.HandlerFunc(health.Check)))
 
 	//Functionality endpoints
-	secure.GET("/:address/power/on", handlers.PowerOn)
-	secure.GET("/:address/power/standby", handlers.Standby)
 	secure.GET("/:address/input/:input/:output", handlers.SwitchInput)
 
 	//Status endpoints
-	secure.GET("/:address/power/status", handlers.GetPower)
 	secure.GET("/:address/input/map", handlers.GetCurrentInput)
 	secure.GET("/:address/input/get/:port", handlers.GetInputByPort)
 

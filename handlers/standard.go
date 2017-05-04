@@ -8,14 +8,6 @@ import (
 	"github.com/labstack/echo"
 )
 
-func PowerOn(context echo.Context) error {
-	return context.JSON(http.StatusOK, nil)
-}
-
-func Standby(context echo.Context) error {
-	return context.JSON(http.StatusOK, nil)
-}
-
 func SwitchInput(context echo.Context) error {
 
 	input := context.Param("input")
@@ -29,10 +21,6 @@ func SwitchInput(context echo.Context) error {
 	}
 
 	return context.JSON(http.StatusOK, "Success")
-}
-
-func GetPower(context echo.Context) error {
-	return context.JSON(http.StatusBadRequest, "Error")
 }
 
 func GetCurrentInput(context echo.Context) error {
