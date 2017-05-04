@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"log"
 	"net/http"
 	"strconv"
 
@@ -49,12 +50,15 @@ func GetCurrentInput(context echo.Context) error {
 func GetInputByPort(context echo.Context) error {
 
 	address := context.Param("address")
-	port, err := strconv.Atoi(context.Param("port"))
+	port := context.Param("port")
+	log.Printf(port)
+	log.Printf(address)
+	bay, err := strconv.Atoi(port)
 	if err != nil {
-		return context.JSON(http.StatusBadRequest, err.Error())
+		return context.JSON(http.StatusBadRequest, "Error! Port parameter must be an integer!")
 	}
 
-	input, err := helpers.GetInputByOutputPort(address, port)
+	input, err := helpers.GetInputByOutputPort(address, bay)
 	if err != nil {
 		return context.JSON(http.StatusInternalServerError, err.Error())
 	}
