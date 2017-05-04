@@ -2,28 +2,31 @@ package helpers
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 )
 
 type Output struct {
-	ReceiveFrom              int    `json:"ReceiveFrom",omitempty`
-	StatusMessage            string `json:"StatusMessage",omitempty`
-	Bay                      int    `json:"Bay"omitempty`
-	Mode                     string `json:"Mode",omitempty`
-	Type                     string `json:"Type",omitempty`
-	Status                   int    `json:"Status"omitempty`
-	Name                     string `json:"Name",omitempty`
-	DPS                      int    `json:"DPS",omitempty`
-	HPD                      int    `json:"HPD",omitempty`
-	HDCP                     int    `json:"HDCP",omitempty`
-	HasSignal                bool   `json:"HasSignal",omitempty`
-	LinkStatus               string `json:"LinkStatus",omitempty`
-	FirmwareVersion          string `json:"FirmwareVersion",omitempty`
-	FirmwareVersionAvailable bool   `json:"FirmwareVersionAvailable"`
-	SupportSB                bool   `json:"SupportSB",omitempty`
-	Result                   bool   `json:"Result",omitempty`
+	ReceiveFrom              int     `json:"ReceiveFrom",omitempty`
+	StatusMessage            string  `json:"StatusMessage",omitempty`
+	Bay                      int     `json:"Bay"omitempty`
+	Mode                     string  `json:"Mode",omitempty`
+	Type                     string  `json:"Type",omitempty`
+	Status                   int     `json:"Status"omitempty`
+	Name                     string  `json:"Name",omitempty`
+	DPS                      int     `json:"DPS",omitempty`
+	HPD                      int     `json:"HPD",omitempty`
+	HDCP                     int     `json:"HDCP",omitempty`
+	HasSignal                bool    `json:"HasSignal",omitempty`
+	LinkStatus               string  `json:"LinkStatus",omitempty`
+	FirmwareVersion          string  `json:"FirmwareVersion",omitempty`
+	FirmwareVersionAvailable bool    `json:"FirmwareVersionAvailable"`
+	SupportSB                bool    `json:"SupportSB",omitempty`
+	Result                   bool    `json:"Result",omitempty`
+	ErrorMessage             *string `json:"ErrorMessage",omitempty`
 }
 
 type Input struct {
@@ -98,6 +101,8 @@ func GetCurrentInputs(address string) (map[string]string, error) {
 //@param bay the number of the physical bay on the device
 func GetInputByOutputPort(address string, bay int) (string, error) {
 
+	log.Printf("Querying input port for output bay %v", bay+1)
+
 	//make a call to get the input source
 	response, err := http.Get(fmt.Sprintf("http://%s/Port/Details/Output/%v", address, bay))
 	if err != nil {
@@ -115,6 +120,11 @@ func GetInputByOutputPort(address string, bay int) (string, error) {
 	if err != nil {
 		return "", err
 	}
+	if output.ErrorMessage != nil {
+		return "", errors.New(*output.ErrorMessage)
+	}
+
+	log.Printf("Querying input bay %v", output.ReceiveFrom+1)
 
 	//make a call based on the bay the output recieves from
 	response, err = http.Get(fmt.Sprintf("http://%s/Port/Details/Input/%v", address, output.ReceiveFrom))
