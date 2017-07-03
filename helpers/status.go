@@ -7,6 +7,8 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+
+	"github.com/byuoitav/av-api/status"
 )
 
 type Output struct {
@@ -85,10 +87,11 @@ func GetCurrentInputs(address string) (map[string]string, error) {
 	for _, port := range ports.Ports {
 		if port.Mode == "Output" {
 
-			input, err := GetInputByOutputPort(address, port.Bay)
+			in, err := GetInputByOutputPort(address, port.Bay)
 			if err != nil {
 				return make(map[string]string), err
 			}
+			input := in.Input
 
 			outputMap[fmt.Sprintf("%v", port.Bay)] = input
 		}
@@ -159,11 +162,11 @@ func GetInputNameByOutputPort(address string, bay int) (string, error) {
 	return input.Name, nil
 }
 
-func GetInputByOutputPort(address string, bay int) (string, error) {
+func GetInputByOutputPort(address string, bay int) (status.Input, error) {
 	output, err := getInputInfoByOutputPort(address, bay)
 	if err != nil {
-		return "", err
+		return status.Input{}, err
 	}
 
-	return fmt.Sprintf("%v", output.ReceiveFrom), nil
+	return status.Input{Input: fmt.Sprintf("%v", output.ReceiveFrom)}, nil
 }
