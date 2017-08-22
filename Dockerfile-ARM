@@ -7,7 +7,7 @@ ADD . /go
 
 WORKDIR /go
 
-CMD ["/go/pulse-eight-neo-microservice"]
+CMD ["/go/pulse-eight-neo-microservice-arm"]
 
 EXPOSE 8011
 

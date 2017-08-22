@@ -4,11 +4,13 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 )
 
 func SwitchInput(address string, input string, output string) error {
 	resp, err := http.Get(fmt.Sprintf("http://%s/Port/Set/%s/%s", address, input, output))
+	defer resp.Body.Close()
 
 	if err != nil {
 		return err
@@ -20,6 +22,6 @@ func SwitchInput(address string, input string, output string) error {
 		}
 		return errors.New(fmt.Sprintf("Pulse eight returned error code: %s and error %s", resp.StatusCode, responseBody))
 	}
-
+	log.Printf("Response received: ")
 	return nil
 }
