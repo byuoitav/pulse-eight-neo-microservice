@@ -10,11 +10,20 @@ machine:
 dependencies:
     pre:
         - rm -rf ~/.go_workspace
+        - go get -u github.com/FiloSottile/gvt
     override:
         - mkdir -p ~/.go_project/src/github.com/${CIRCLE_PROJECT_USERNAME}
         - ln -s ${HOME}/${CIRCLE_PROJECT_REPONAME} ${HOME}/.go_project/src/github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}
         - cd ~/.go_project/src/github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}
         - go get -d -v
+        - >
+            if [ $CIRCLE_BRANCH = "testing" ]; then
+                gvt fetch -branch testing github.com/byuoitav/av-api
+            elif [ $CIRCLE_BRANCH = "stage" ]; then
+                gvt fetch -branch stage github.com/byuoitav/av-api
+            elif [ $CIRCLE_BRANCH = "production" ]; then
+                gvt fetch -branch production github.com/byuoitav/av-api
+            fi
 
 compile:
     override:
