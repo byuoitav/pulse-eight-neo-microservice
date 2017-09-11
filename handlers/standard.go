@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/byuoitav/av-api/statusevaluators"
 	"github.com/byuoitav/pulse-eight-neo-microservice/helpers"
 	"github.com/labstack/echo"
 )
@@ -26,7 +27,7 @@ func SwitchInput(context echo.Context) error {
 	}
 
 	log.Printf("Success")
-	return context.JSON(http.StatusOK, "Success")
+	return context.JSON(http.StatusOK, statusevaluators.Input{Input: input})
 }
 
 func GetCurrentInput(context echo.Context) error {
