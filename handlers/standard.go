@@ -27,7 +27,9 @@ func SwitchInput(context echo.Context) error {
 	}
 
 	log.Printf("Success")
-	return context.JSON(http.StatusOK, statusevaluators.Input{Input: input})
+	returnVal := input + ":" + output
+
+	return context.JSON(http.StatusOK, statusevaluators.Input{Input: returnVal})
 }
 
 func GetCurrentInput(context echo.Context) error {
