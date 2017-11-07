@@ -57,5 +57,7 @@ func GetInputByPort(context echo.Context) error {
 		return context.JSON(http.StatusInternalServerError, err.Error())
 	}
 
+	input.Input = input.Input + ":" + port
+
 	return context.JSON(http.StatusOK, input)
 }
