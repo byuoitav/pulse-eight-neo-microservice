@@ -1,6 +1,7 @@
 package helpers
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io/ioutil"
@@ -8,13 +9,17 @@ import (
 	"net/http"
 )
 
+type Result struct {
+	Result bool `json:"Result"`
+}
+
 func SwitchInput(address string, input string, output string) error {
 	resp, err := http.Get(fmt.Sprintf("http://%s/Port/Set/%s/%s", address, input, output))
-	defer resp.Body.Close()
-
 	if err != nil {
 		return err
 	}
+	defer resp.Body.Close()
+
 	if resp.StatusCode != 200 {
 		responseBody, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
@@ -22,6 +27,20 @@ func SwitchInput(address string, input string, output string) error {
 		}
 		return errors.New(fmt.Sprintf("Pulse eight returned error code: %s and error %s", resp.StatusCode, responseBody))
 	}
-	log.Printf("Response received: ")
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return err
+	}
+
+	log.Printf("Response received: %s", body)
+
+	var result Result
+	json.Unmarshal(body, &result)
+
+	if !result.Result {
+		return errors.New(fmt.Sprintf("Pulse eight bad result: %s", result))
+	}
+
 	return nil
 }
