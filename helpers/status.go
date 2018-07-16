@@ -8,7 +8,7 @@ import (
 	"log"
 	"net/http"
 
-	se "github.com/byuoitav/av-api/statusevaluators"
+	"github.com/byuoitav/common/status"
 )
 
 type Output struct {
@@ -162,11 +162,11 @@ func GetInputNameByOutputPort(address string, bay int) (string, error) {
 	return input.Name, nil
 }
 
-func GetInputByOutputPort(address string, bay int) (se.Input, error) {
+func GetInputByOutputPort(address string, bay int) (status.Input, error) {
 	output, err := getInputInfoByOutputPort(address, bay)
 	if err != nil {
-		return se.Input{}, err
+		return status.Input{}, err
 	}
 
-	return se.Input{Input: fmt.Sprintf("%v", output.ReceiveFrom)}, nil
+	return status.Input{Input: fmt.Sprintf("%v", output.ReceiveFrom)}, nil
 }
