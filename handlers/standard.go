@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/byuoitav/common/status"
 	"github.com/byuoitav/pulse-eight-neo-microservice/helpers"
@@ -26,7 +27,12 @@ func SwitchInput(context echo.Context) error {
 		return context.JSON(http.StatusInternalServerError, err.Error())
 	}
 
+	log.Printf("Su-Chess")
+
+	time.Sleep(20 * time.Millisecond)
+
 	log.Printf("Success")
+
 	returnVal := input + ":" + output
 
 	return context.JSON(http.StatusOK, status.Input{Input: returnVal})
