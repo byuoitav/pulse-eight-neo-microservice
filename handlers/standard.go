@@ -29,7 +29,7 @@ func SwitchInput(context echo.Context) error {
 
 	log.Printf("Su-Chess")
 
-	time.Sleep(64 * time.Millisecond)
+	time.Sleep(128 * time.Millisecond)
 
 	log.Printf("Success")
 
