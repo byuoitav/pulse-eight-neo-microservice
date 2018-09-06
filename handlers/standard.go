@@ -12,7 +12,7 @@ import (
 	"github.com/labstack/echo"
 )
 
-const lockTime = 10 * time.Second
+const lockTime = 128 * time.Millisecond
 
 func SwitchInput(context echo.Context) error {
 	log.SetLevel("debug")
@@ -75,7 +75,7 @@ func GetInputByPort(context echo.Context) error {
 var (
 	delayMap map[string]*sync.Mutex
 	mapInit  sync.Once
-	mapLock  sync.Mutex
+	mapLock  sync.RWMutex
 )
 
 func lock(address string) {
@@ -83,13 +83,18 @@ func lock(address string) {
 		delayMap = make(map[string]*sync.Mutex)
 	})
 
-	mapLock.Lock()
+	mapLock.RLock()
 	lock := delayMap[address]
+	mapLock.RUnlock()
+
 	if lock == nil {
+		mapLock.Lock()
+
 		lock = &sync.Mutex{}
 		delayMap[address] = lock
+
+		mapLock.Unlock()
 	}
-	mapLock.Unlock()
 
 	log.L.Debugf("Waiting for lock on address %v", address)
 	lock.Lock()
@@ -97,12 +102,13 @@ func lock(address string) {
 }
 
 func unlock(address string) {
-	mapLock.Lock()
+	mapLock.RLock()
 	lock := delayMap[address]
+	mapLock.RUnlock()
+
 	if lock == nil {
 		return
 	}
-	mapLock.Unlock()
 
 	go func() {
 		log.L.Debugf("Unlocking %v in %v", address, lockTime)
