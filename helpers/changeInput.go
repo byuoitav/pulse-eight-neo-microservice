@@ -2,11 +2,11 @@ package helpers
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
+
+	"github.com/byuoitav/common/log"
 )
 
 type Result struct {
@@ -25,7 +25,7 @@ func SwitchInput(address string, input string, output string) error {
 		if err != nil {
 			return err
 		}
-		return errors.New(fmt.Sprintf("Pulse eight returned error code: %s and error %s", resp.StatusCode, responseBody))
+		return fmt.Errorf("Pulse eight returned error code: %v and error %s", resp.StatusCode, responseBody)
 	}
 
 	body, err := ioutil.ReadAll(resp.Body)
@@ -33,13 +33,13 @@ func SwitchInput(address string, input string, output string) error {
 		return err
 	}
 
-	log.Printf("Response received: %s", body)
+	log.L.Infof("Response from %v: %v", address, body)
 
 	var result Result
 	json.Unmarshal(body, &result)
 
 	if !result.Result {
-		return errors.New(fmt.Sprintf("Pulse eight bad result: %s", result))
+		return fmt.Errorf("Pulse eight bad result: %v", result)
 	}
 
 	return nil
