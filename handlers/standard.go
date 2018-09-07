@@ -22,8 +22,8 @@ func SwitchInput(context echo.Context) error {
 
 	log.L.Infof("Routing %v to %v on %v", input, output, address)
 
-	lock(address)
-	defer unlock(address)
+	unlock := lock(address)
+	defer unlock()
 
 	err := helpers.SwitchInput(address, input, output)
 	if err != nil {
@@ -40,8 +40,8 @@ func SwitchInput(context echo.Context) error {
 func GetCurrentInput(context echo.Context) error {
 	address := context.Param("address")
 
-	lock(address)
-	defer unlock(address)
+	unlock := lock(address)
+	defer unlock()
 
 	inputs, err := helpers.GetCurrentInputs(address)
 	if err != nil {
@@ -59,8 +59,8 @@ func GetInputByPort(context echo.Context) error {
 		return context.JSON(http.StatusBadRequest, "Error! Port parameter must be zero or greater")
 	}
 
-	lock(address)
-	defer unlock(address)
+	unlock := lock(address)
+	defer unlock()
 
 	input, err := helpers.GetInputByOutputPort(address, bay)
 	if err != nil {
@@ -78,7 +78,7 @@ var (
 	mapLock  sync.RWMutex
 )
 
-func lock(address string) {
+func lock(address string) func() {
 	mapInit.Do(func() {
 		delayMap = make(map[string]*sync.Mutex)
 	})
@@ -99,23 +99,15 @@ func lock(address string) {
 	log.L.Debugf("Waiting for lock on address %v", address)
 	lock.Lock()
 	log.L.Debugf("Received lock on %v", address)
-}
 
-func unlock(address string) {
-	mapLock.RLock()
-	lock := delayMap[address]
-	mapLock.RUnlock()
+	return func() {
+		go func() {
+			log.L.Debugf("Unlocking %v in %v", address, lockTime)
 
-	if lock == nil {
-		return
+			time.Sleep(lockTime)
+			lock.Unlock()
+
+			log.L.Debugf("Unlocked %v", address)
+		}()
 	}
-
-	go func() {
-		log.L.Debugf("Unlocking %v in %v", address, lockTime)
-
-		time.Sleep(lockTime)
-		lock.Unlock()
-
-		log.L.Debugf("Unlocked %v", address)
-	}()
 }
