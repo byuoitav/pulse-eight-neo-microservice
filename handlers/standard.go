@@ -17,8 +17,8 @@ const lockTime = 128 * time.Millisecond
 
 //SwitchInput .
 func SwitchInput(context echo.Context) error {
-	log.SetLevel("debug")
-	if ok, err := auth.CheckAuthForLocalEndpoints(context, "set-state"); !ok {
+	//log.SetLevel("debug")
+	if ok, err := auth.CheckAuthForLocalEndpoints(context, "write-state"); !ok {
 		if err != nil {
 			log.L.Warnf("Problem getting auth: %v", err.Error())
 		}
@@ -49,7 +49,7 @@ func SwitchInput(context echo.Context) error {
 func GetCurrentInput(context echo.Context) error {
 	address := context.Param("address")
 
-	if ok, err := auth.CheckAuthForLocalEndpoints(context, "get-state"); !ok {
+	if ok, err := auth.CheckAuthForLocalEndpoints(context, "read-state"); !ok {
 		if err != nil {
 			log.L.Warnf("Problem getting auth: %v", err.Error())
 		}
@@ -70,7 +70,7 @@ func GetInputByPort(context echo.Context) error {
 	address := context.Param("address")
 	port := context.Param("port")
 
-	if ok, err := auth.CheckAuthForLocalEndpoints(context, "get-state"); !ok {
+	if ok, err := auth.CheckAuthForLocalEndpoints(context, "read-state"); !ok {
 		if err != nil {
 			log.L.Warnf("Problem getting auth: %v", err.Error())
 		}
