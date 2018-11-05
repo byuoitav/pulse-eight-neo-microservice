@@ -129,8 +129,6 @@ func getInputInfoByOutputPort(address string, bay int) (Output, error) {
 	return output, nil
 }
 
-/*
- */
 //returns a string representing the name of the source displayed on the output port
 //@param bay the number of the physical bay on the device
 func GetInputNameByOutputPort(address string, bay int) (string, error) {
