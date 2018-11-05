@@ -33,7 +33,7 @@ func SwitchInput(address string, input string, output string) error {
 		return err
 	}
 
-	log.L.Infof("Response from %v: %v", address, body)
+	log.L.Infof("Response from %v: %s", address, body)
 
 	var result Result
 	json.Unmarshal(body, &result)
