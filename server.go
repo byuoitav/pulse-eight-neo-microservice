@@ -3,32 +3,26 @@ package main
 import (
 	"net/http"
 
-	"github.com/byuoitav/authmiddleware"
+	"github.com/byuoitav/common"
 	"github.com/byuoitav/hateoas"
 	"github.com/byuoitav/pulse-eight-neo-microservice/handlers"
-	"github.com/jessemillar/health"
 	"github.com/labstack/echo"
-	"github.com/labstack/echo/middleware"
 )
 
 func main() {
 	port := ":8011"
-	router := echo.New()
-	router.Pre(middleware.RemoveTrailingSlash())
-	router.Use(middleware.CORS())
+	router := common.NewRouter()
 
-	// Use the `secure` routing group to require authentication
-	secure := router.Group("", echo.WrapMiddleware(authmiddleware.Authenticate))
+	// Use the `rotuer` routing group to require authentication
 
 	router.GET("/", echo.WrapHandler(http.HandlerFunc(hateoas.RootResponse)))
-	router.GET("/health", echo.WrapHandler(http.HandlerFunc(health.Check)))
 
 	//Functionality endpoints
-	secure.GET("/:address/input/:input/:output", handlers.SwitchInput)
+	router.GET("/:address/input/:input/:output", handlers.SwitchInput)
 
 	//Status endpoints
-	secure.GET("/:address/input/map", handlers.GetCurrentInput)
-	secure.GET("/:address/input/get/:port", handlers.GetInputByPort)
+	router.GET("/:address/input/map", handlers.GetCurrentInput)
+	router.GET("/:address/input/get/:port", handlers.GetInputByPort)
 
 	server := http.Server{
 		Addr:           port,

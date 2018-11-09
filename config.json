@@ -1,0 +1,8 @@
+{
+    "name": "pulse-eight-neo-microservice",
+    "port": ":8011",
+    "env-vars": [
+        "BYPASS_AUTH",
+        "ROOM_SYSTEM"
+    ]
+}
