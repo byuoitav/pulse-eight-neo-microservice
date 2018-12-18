@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"net/http"
-	"strconv"
 
 	"github.com/byuoitav/common/log"
 	"github.com/byuoitav/pulse-eight-neo-microservice/helpers"
@@ -26,10 +25,6 @@ func GetHardwareInfo(context echo.Context) error {
 func GetActiveSignalByPort(context echo.Context) error {
 	address := context.Param("address")
 	port := context.Param("port")
-
-	portNum, _ := strconv.Atoi(port)
-
-	port = strconv.Itoa(portNum - 1)
 
 	active, err := helpers.GetActiveSignal(address, port)
 	if err != nil {
