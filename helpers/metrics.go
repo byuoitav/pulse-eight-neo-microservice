@@ -84,5 +84,31 @@ func GetHardwareInfo(address string) (structs.HardwareInfo, *nerr.E) {
 func GetActiveSignal(address, port string) (structs.ActiveSignal, *nerr.E) {
 	var toReturn structs.ActiveSignal
 
+	resp, err := http.Get(fmt.Sprintf("http://%s/Port/Details/Input/%s", address, port))
+	if err != nil {
+		msg := fmt.Sprintf("failed to get a response from %s", address)
+		log.L.Errorf("%s : %s", msg, err.Error())
+		return toReturn, nerr.Translate(err).Add(msg)
+	}
+
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		msg := fmt.Sprintf("failed to read the response from %s", address)
+		log.L.Errorf("%s : %s", msg, err.Error())
+		return toReturn, nerr.Translate(err).Add(msg)
+	}
+
+	var input Input
+	err = json.Unmarshal(body, &input)
+	if err != nil {
+		msg := fmt.Sprintf("failed to unmarshal the response from %s", address)
+		log.L.Errorf("%s : %s", msg, err.Error())
+		return toReturn, nerr.Translate(err).Add(msg)
+	}
+
+	toReturn.Active = input.HasSignal
+
 	return toReturn, nil
 }
