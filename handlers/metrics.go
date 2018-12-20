@@ -12,6 +12,11 @@ import (
 func GetHardwareInfo(context echo.Context) error {
 	address := context.Param("address")
 
+	log.L.Infof("Getting hardware info on %s", address)
+
+	unlock := lock(address)
+	defer unlock()
+
 	hardware, err := helpers.GetHardwareInfo(address)
 	if err != nil {
 		log.L.Error(err.Error())
@@ -25,6 +30,11 @@ func GetHardwareInfo(context echo.Context) error {
 func GetActiveSignalByPort(context echo.Context) error {
 	address := context.Param("address")
 	port := context.Param("port")
+
+	log.L.Infof("Getting active signal for port %s on %s", port, address)
+
+	unlock := lock(address)
+	defer unlock()
 
 	active, err := helpers.GetActiveSignal(address, port)
 	if err != nil {
