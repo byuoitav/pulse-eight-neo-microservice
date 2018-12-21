@@ -8,7 +8,6 @@ import (
 
 	"github.com/byuoitav/common/log"
 	"github.com/byuoitav/common/status"
-	"github.com/byuoitav/common/v2/auth"
 	"github.com/byuoitav/pulse-eight-neo-microservice/helpers"
 	"github.com/labstack/echo"
 )
@@ -17,14 +16,6 @@ const lockTime = 128 * time.Millisecond
 
 //SwitchInput .
 func SwitchInput(context echo.Context) error {
-	//log.SetLevel("debug")
-	if ok, err := auth.CheckAuthForLocalEndpoints(context, "write-state"); !ok {
-		if err != nil {
-			log.L.Warnf("Problem getting auth: %v", err.Error())
-		}
-		return context.String(http.StatusUnauthorized, "unauthorized")
-	}
-
 	input := context.Param("input")
 	output := context.Param("output")
 	address := context.Param("address")
@@ -49,12 +40,6 @@ func SwitchInput(context echo.Context) error {
 func GetCurrentInput(context echo.Context) error {
 	address := context.Param("address")
 
-	if ok, err := auth.CheckAuthForLocalEndpoints(context, "read-state"); !ok {
-		if err != nil {
-			log.L.Warnf("Problem getting auth: %v", err.Error())
-		}
-		return context.String(http.StatusUnauthorized, "unauthorized")
-	}
 	unlock := lock(address)
 	defer unlock()
 
@@ -69,13 +54,6 @@ func GetCurrentInput(context echo.Context) error {
 func GetInputByPort(context echo.Context) error {
 	address := context.Param("address")
 	port := context.Param("port")
-
-	if ok, err := auth.CheckAuthForLocalEndpoints(context, "read-state"); !ok {
-		if err != nil {
-			log.L.Warnf("Problem getting auth: %v", err.Error())
-		}
-		return context.String(http.StatusUnauthorized, "unauthorized")
-	}
 
 	bay, err := strconv.Atoi(port)
 	if err != nil || bay < 0 {
