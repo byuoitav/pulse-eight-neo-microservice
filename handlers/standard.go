@@ -73,6 +73,19 @@ func GetInputByPort(context echo.Context) error {
 	return context.JSON(http.StatusOK, input)
 }
 
+// IssueReboot will reboot a pulse 8 switcher
+func IssueReboot(context echo.Context) error {
+	address := context.Param("address")
+
+	// Send the reboot command
+	err := helpers.RebootNeo(address)
+	if err != nil {
+		return context.JSON(http.StatusInternalServerError, err.Error())
+	}
+
+	return context.JSON(http.StatusOK, status.Input{Input: "Rebooting"})
+}
+
 var (
 	delayMap map[string]*sync.Mutex
 	mapInit  sync.Once
