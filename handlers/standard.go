@@ -37,6 +37,7 @@ func SwitchInput(context echo.Context) error {
 	return context.JSON(http.StatusOK, status.Input{Input: returnVal})
 }
 
+// GetCurrentInput returns what the current input being shown is
 func GetCurrentInput(context echo.Context) error {
 	address := context.Param("address")
 
@@ -51,6 +52,7 @@ func GetCurrentInput(context echo.Context) error {
 	return context.JSON(http.StatusOK, inputs)
 }
 
+// GetInputByPort will return the input for a specific port
 func GetInputByPort(context echo.Context) error {
 	address := context.Param("address")
 	port := context.Param("port")
@@ -83,7 +85,7 @@ func IssueReboot(context echo.Context) error {
 		return context.JSON(http.StatusInternalServerError, err.Error())
 	}
 
-	return context.JSON(http.StatusOK, status.Input{Input: "Rebooting"})
+	return context.JSON(http.StatusOK, status.Power{Power: "Rebooting"})
 }
 
 var (
