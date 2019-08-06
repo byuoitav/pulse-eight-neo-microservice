@@ -22,6 +22,7 @@ func main() {
 
 	//Functionality endpoints
 	write.GET("/:address/input/:input/:output", handlers.SwitchInput)
+	write.GET("/:address/reboot", handlers.IssueReboot)
 
 	//Status endpoints
 	read.GET("/:address/input/map", handlers.GetCurrentInput)
