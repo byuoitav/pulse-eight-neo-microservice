@@ -37,6 +37,7 @@ func SwitchInput(context echo.Context) error {
 	return context.JSON(http.StatusOK, status.Input{Input: returnVal})
 }
 
+// GetCurrentInput returns what the current input being shown is
 func GetCurrentInput(context echo.Context) error {
 	address := context.Param("address")
 
@@ -51,6 +52,7 @@ func GetCurrentInput(context echo.Context) error {
 	return context.JSON(http.StatusOK, inputs)
 }
 
+// GetInputByPort will return the input for a specific port
 func GetInputByPort(context echo.Context) error {
 	address := context.Param("address")
 	port := context.Param("port")
@@ -71,6 +73,19 @@ func GetInputByPort(context echo.Context) error {
 	input.Input = input.Input + ":" + port
 
 	return context.JSON(http.StatusOK, input)
+}
+
+// IssueReboot will reboot a pulse 8 switcher
+func IssueReboot(context echo.Context) error {
+	address := context.Param("address")
+
+	// Send the reboot command
+	err := helpers.RebootNeo(address)
+	if err != nil {
+		return context.JSON(http.StatusInternalServerError, err.Error())
+	}
+
+	return context.JSON(http.StatusOK, status.Power{Power: "Rebooting"})
 }
 
 var (
