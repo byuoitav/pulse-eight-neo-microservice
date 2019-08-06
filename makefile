@@ -40,13 +40,13 @@ build: build-x86 build-arm
 build-x86:
 	env GOOS=linux CGO_ENABLED=0 $(GOBUILD) -o $(NAME)-bin -v
 
-build-arm: 
+build-arm:
 	env GOOS=linux GOARCH=arm $(GOBUILD) -o $(NAME)-arm -v
 
-test: 
-	$(GOTEST) -v -race $(go list ./... | grep -v /vendor/) 
+test:
+	$(GOTEST) -v -race $(go list ./... | grep -v /vendor/)
 
-clean: 
+clean:
 	$(GOCLEAN)
 	rm -f $(NAME)-bin
 	rm -f $(NAME)-arm
@@ -54,15 +54,13 @@ clean:
 run: $(NAME)-bin
 	./$(NAME)-bin
 
-deps: 
+deps:
 	$(GOGET) -d -v
 ifneq "$(BRANCH)" "master"
 	# put vendored packages in here
 	# e.g. $(VENDOR) github.com/byuoitav/event-router-microservice
-	$(VENDOR) github.com/byuoitav/authmiddleware
-
+	gvt fetch -tag v3.3.10 github.com/labstack/echo
 	$(VENDOR) github.com/byuoitav/common
-
 endif
 
 docker: docker-x86 docker-arm
